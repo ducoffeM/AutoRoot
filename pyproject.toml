@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "AutoRoot"
+description = "AutoRoot: Differentiable Root Solvers for Cubic and Quartic Polynomials AutoRoot is a fast, fully differentiable PyTorch library for solving cubic and quartic equations."
+readme = "README.md"
+authors = [
+    {email ="prune.mamalet@etu.toulouse-inp.fr"},
+]
+requires-python = ">=3.9"
+dependencies =[
+    "torch",
+]
+license = {text = "MIT"}
+dynamic = ["version"]
+
+
+[project.urls]
+documentation = "https://Pruneeuh.github.io/AutoRoot"
+repository = "https://github.com/Pruneeuh/AutoRoot"
+
+[project.optional-dependencies]
+dev = ["tox>=4.6.4"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["autoroot*"]
+
+[tool.setuptools_scm]
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "--import-mode=importlib",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py39']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+
+
+
+[[tool.mypy.overrides]]
+module = [
+    "torch.*"
+]
+ignore_missing_imports = true
