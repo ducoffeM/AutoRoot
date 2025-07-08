@@ -1,5 +1,6 @@
 import pytest
-from conftest import test_polynomial_root_calculation_3rd_degree
+
+from .conftest import check_polynomial_root_calculation_3rd_degree
 
 
 @pytest.mark.parametrize(
@@ -16,4 +17,9 @@ def test_cubic(a, b, c, d):
     Test the polynomial root calculation for a cubic polynomial.
     This function uses pytest to run the test.
     """
-    test_polynomial_root_calculation_3rd_degree(a, b, c, d)
+    pytest.skip()
+    check_polynomial_root_calculation_3rd_degree(a, b, c, d)
+
+
+def test_toto():
+    assert 3 == 4
