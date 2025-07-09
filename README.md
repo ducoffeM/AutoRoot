@@ -14,6 +14,7 @@ While initially developed for solving P3P problems (as part of improving the per
 
 
 # Project Structure : 
+```
 📂 autoroot/                    # Main source director  
 ├── 📁 torch/                   # Torch-related implementations  
 │   ├── 📁 complex/             # Complex functions utils  
@@ -33,7 +34,7 @@ While initially developed for solving P3P problems (as part of improving the per
 📄 pyproject.toml                # Build system and tool configs  
 📄 README.md                     # Project overview  
 📄 tox.ini                       # Tox testing configuration  
-
+```
 # Dependencies
 AutoRoot primarily relies on PyTorch for its core tensor operations and differentiability features. numpy is also used within the test suite for robust result verification.
 
