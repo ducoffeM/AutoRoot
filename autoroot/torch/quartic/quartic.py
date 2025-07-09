@@ -32,28 +32,23 @@ def polynomial_root_calculation_4th_degree_ferrari(a0 : Tensor, a1: Tensor, a2 :
     b1 : Tensor = c - 2*b*S + 8*S**3 # (batch_size, 1)
     b2 : Tensor = b - 6 * S**2  # (batch_size, 1)
 
-
     # Solve the cubic equation m^3 + b2*m^2 + (b2^2/4  - b0)*m - b1^2/8 = 0
-    x_cube : Tensor = polynomial_root_calculation_3rd_degree(torch.tensor(1).repeat(b2.shape),b2,(b2**2)/4-b0,(-b1**2)/8)
-  
+    x_cube : Tensor = polynomial_root_calculation_3rd_degree(torch.tensor(1,dtype=torch.float64).repeat(b2.shape),b2,(b2**2)/4-b0,(-b1**2)/8)
     
     x_cube_real : Tensor = x_cube[:,:,0] #  (batch_size, 3)
     x_cube_imag : Tensor = x_cube[:,:,1]  #    (batch_size, 3)
 
-    is_real : Tensor = torch.isclose(x_cube_imag,torch.tensor(0.0))
+    is_real : Tensor = torch.isclose(x_cube_imag,torch.tensor(0.0,dtype = torch.float64),atol=1e-10, rtol=1e-5)
     is_positive : Tensor = x_cube[:,:,0] > 0
     condition : Tensor = is_real & is_positive  # Condition to check if the root is real and positive   (batch_size, 3)
-   
     
     real_filtered : Tensor = x_cube_real.clone()
     real_filtered[~condition] = float('inf')  # if root real and positive, keep it, else set to infinity   (batch_size, 3)
 
     alpha_0_real : Tensor 
     alpha_0_real, _ = real_filtered.min(dim=1) # Get the minimum real part of the roots (if doesn't exist, returns inf)
-
-    alpha_0 : Tensor = torch.stack([alpha_0_real, torch.zeros(batch_size)], dim=-1)  # (batch_size,2)
+    alpha_0 : Tensor = torch.stack([alpha_0_real, torch.zeros(batch_size,dtype = torch.float64)], dim=-1)  # (batch_size,2)
     
-
     # do the calculation for alpha_0_nul and not alpha_0_nul and then affects the good value 
 
     # if alpha_0_nul == False
@@ -61,16 +56,16 @@ def polynomial_root_calculation_4th_degree_ferrari(a0 : Tensor, a1: Tensor, a2 :
     sqrt_alpha : Tensor = sqrt_batch(alpha0_div_2[:,0].unsqueeze(-1))    # input : (batch_size, 1) // output : (batch_size, 2)
     term : Tensor= addition_complex_real_batch(- alpha0_div_2 ,-b2 / 2)      # (batch_size, 2)
     denom : Tensor= 2 * torch.sqrt(2 * alpha_0)      # beacause alpha_0 is real  # (batch_size, 2)
-    num : Tensor = torch.stack([b1, torch.zeros(batch_size,1)], dim=-1).squeeze(1)  # (batch_size, 2)
+    num : Tensor = torch.stack([b1, torch.zeros(batch_size,1,dtype = torch.float64)], dim=-1).squeeze(1)  # (batch_size, 2)
    
-
-    frac : Tensor = division_2_complex_numbers(num,denom)    # (batch_size, 2)
     
+    frac : Tensor = division_2_complex_numbers(num,denom)    # (batch_size, 2)
+
     x1_false : Tensor = addition_complex_real_batch(sqrt_alpha ,- S) + sqrt_complex_batch(addition_batch(term,-frac))    # (batch_size, 2)
     x2_false : Tensor = addition_complex_real_batch(sqrt_alpha, - S) - sqrt_complex_batch(addition_batch(term,-frac))    # (batch_size, 2)
     x3_false : Tensor = addition_complex_real_batch(-sqrt_alpha, - S) + sqrt_complex_batch(addition_batch(term,frac))    # (batch_size, 2)
     x4_false : Tensor = addition_complex_real_batch(-sqrt_alpha,- S) - sqrt_complex_batch(addition_batch(term,frac))     # (batch_size, 2)
-    
+   
     # if alpha_0_nul == True
     sqrt_inner1 : Tensor = sqrt_batch((b2**2) / 4 - b0)        # complex 
 
@@ -78,8 +73,8 @@ def polynomial_root_calculation_4th_degree_ferrari(a0 : Tensor, a1: Tensor, a2 :
     x2_true : Tensor = addition_complex_real_batch(- sqrt_complex_batch(addition_complex_real_batch(sqrt_inner1,-b2 / 2)),-S)
     x3_true : Tensor = addition_complex_real_batch(sqrt_complex_batch(addition_complex_real_batch(- sqrt_inner1,-b2 / 2 )),-S)
     x4_true : Tensor = addition_complex_real_batch(- sqrt_complex_batch(addition_complex_real_batch(- sqrt_inner1,-b2 / 2 )),-S)
-    
-    result : Tensor = torch.where(alpha_0==float('inf'),
+   
+    result : Tensor = torch.where(alpha_0_real==float('inf'),
                          torch.stack([x1_true, x2_true, x3_true, x4_true]),torch.stack([x1_false, x2_false, x3_false, x4_false]))
     
     return result   # (4,batch_size, 2)
