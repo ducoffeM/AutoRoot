@@ -22,9 +22,7 @@ def addition_batch(a: Tensor, b: Tensor) -> Tensor:
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     # b = torch.tensor(batch_size*[b_real, b_imag])
-    return torch.stack(
-        [a[:, 0] + b[:, 0], a[:, 1] + b[:, 1]], dim=-1
-    )  # (batch_size, 2)
+    return torch.stack([a[:, 0] + b[:, 0], a[:, 1] + b[:, 1]], dim=-1)  # (batch_size, 2)
 
 
 def product_of_2_complex_numbers_batch(a: Tensor, b: Tensor) -> Tensor:
@@ -63,12 +61,8 @@ def sqrt_batch(a: Tensor) -> Tensor:
     """
     # a.shape = (batch_size,1)
     # a is a tensor of real numbers, sqrt is element-wise
-    real_part: Tensor = torch.where(
-        a >= 0, torch.sqrt(a), torch.tensor(0.0) * a
-    )  # (batch_size,1)
-    imag_part: Tensor = torch.where(
-        a < 0, torch.sqrt(-a), torch.tensor(0.0) * a
-    )  # (batch_size,1)
+    real_part: Tensor = torch.where(a >= 0, torch.sqrt(a), torch.tensor(0.0) * a)  # (batch_size,1)
+    imag_part: Tensor = torch.where(a < 0, torch.sqrt(-a), torch.tensor(0.0) * a)  # (batch_size,1)
 
     return torch.cat((real_part, imag_part), dim=1)  # (batch_size, 2)
 
@@ -93,9 +87,7 @@ def product_complex_real_batch(a: Tensor, b: Tensor) -> Tensor:
     # a = torch.tensor(batch_size*[,a_real, a_imag]) # (batch_size, 2)
     # b is a real number (batch_size,1) # (batch_size, 1)
 
-    return torch.stack(
-        [a[:, 0] * b.squeeze(), a[:, 1] * b.squeeze()], dim=-1
-    )  # (batch_size, 2)
+    return torch.stack([a[:, 0] * b.squeeze(), a[:, 1] * b.squeeze()], dim=-1)  # (batch_size, 2)
 
 
 def inverse_complex_number(a: Tensor) -> Tensor:
@@ -179,13 +171,9 @@ def argument_batch(a: Tensor) -> Tensor:  # potentiellemen pb si (0,0)
         torch.atan(a[:, 1] / a[:, 0]) - torch.tensor(math.pi),
     )
 
-    cas_a0_negatif_ou_nul: Tensor = torch.where(
-        a[:, 0] == 0, cas_a0_nul, cas_a0_negatif
-    )
+    cas_a0_negatif_ou_nul: Tensor = torch.where(a[:, 0] == 0, cas_a0_nul, cas_a0_negatif)
 
-    result: Tensor = torch.where(
-        a[:, 0] > 0, torch.atan(a[:, 1] / a[:, 0]), cas_a0_negatif_ou_nul
-    )
+    result: Tensor = torch.where(a[:, 0] > 0, torch.atan(a[:, 1] / a[:, 0]), cas_a0_negatif_ou_nul)
 
     return result.unsqueeze(-1)  # (batch_size, 1)
 
