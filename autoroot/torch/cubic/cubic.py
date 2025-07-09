@@ -35,7 +35,7 @@ def polynomial_root_calculation_3rd_degree(a : Tensor, b : Tensor, c: Tensor , d
 
     roots: Tensor = torch.empty((batch_size,3, 2))  # Initialize roots tensor to store the roots
 
-    j_ : Tensor = torch.tensor([-0.5, torch.sqrt(torch.tensor(3))/2])  # cube root of unity
+    j_ : Tensor = torch.tensor([-0.5, torch.sqrt(torch.tensor(3))/2]).repeat(batch_size,1)  # cube root of unity
     
     for k in range (3):
         delta_sur_27 : Tensor = -delta / 27   #(batch_size, 1) 
@@ -46,12 +46,10 @@ def polynomial_root_calculation_3rd_degree(a : Tensor, b : Tensor, c: Tensor , d
         j_exp_k : Tensor = complex_number_power_k_batch(j_, k)  # Compute j^k for each batch
         j_exp_sub_k : Tensor = complex_number_power_k_batch(j_, -k)  # Compute j^-k for each batch
 
-        j_exp_k_batch : Tensor = j_exp_k.repeat(batch_size, 1)
-        j_exp_sub_k_batch : Tensor= j_exp_sub_k.repeat(batch_size, 1)
-
-        u_k : Tensor = product_of_2_complex_numbers_batch(j_exp_k_batch, sqrt_3_batch(torch.stack([0.5*(-q.squeeze()+sqrt_term[:,0]),sqrt_term[:,1]],dim=-1)) )
+    
+        u_k : Tensor = product_of_2_complex_numbers_batch(j_exp_k, sqrt_3_batch(torch.stack([0.5*(-q.squeeze()+sqrt_term[:,0]),sqrt_term[:,1]],dim=-1)) )
          # (batch_size, 2) 
-        v_k : Tensor = product_of_2_complex_numbers_batch(j_exp_sub_k_batch, sqrt_3_batch(torch.stack([0.5*(-q.squeeze()-sqrt_term[:,0]),-0.5*sqrt_term[:,1]],dim=-1)))
+        v_k : Tensor = product_of_2_complex_numbers_batch(j_exp_sub_k, sqrt_3_batch(torch.stack([0.5*(-q.squeeze()-sqrt_term[:,0]),-0.5*sqrt_term[:,1]],dim=-1)))
           # (batch_size, 2) 
 
         root : Tensor = addition_batch(addition_batch(u_k, v_k), torch.stack([-b[:,0]/(3*a[:,0]),0.0*b[:,0]],dim=-1) ) 
