@@ -14,15 +14,15 @@ While initially developed for solving P3P problems (as part of improving the per
 
 
 # Project Structure : 
-📂 autoroot/                    # Main source directory
+📂 autoroot/                    # Main source director
 ├── 📁 torch/                   # Torch-related implementations
-│   ├── 📁 complex/             # Complex functions utils 
+│   ├── 📁 complex/             # Complex functions utils
 │   │   ├── 📄 complex_utils.py
-│   ├── 📁 cubic/               # Cubic solver 
+│   ├── 📁 cubic/               # Cubic solver
 │   │   ├── 📄 cubic.py
-│   ├── 📁 quartic/             # Quartic solver 
+│   ├── 📁 quartic/             # Quartic solver
 │   │   ├── 📄 quartic.py
-│   ├── 📄 types.py            
+│   ├── 📄 types.py    
 
 📂 tests/                        # Unit tests
 ├── 📄 conftest.py                     
@@ -50,7 +50,7 @@ All required dependencies for the project and its testing are listed in the pypr
 # Using 
 The main functions are located in the autoroot.torch.cubic and autoroot.torch.quartic modules. 
 
-Input : coefficiants of the polynomial ->  torch.Tensor of size (batch_size, 1)*
+Input : coefficiants of the polynomial ->  torch.Tensor of size (batch_size, 1)
 Output : roots of the polynomial -> torch.Tensor where each complex root is a [real, imaginary] vector.
 
 Please note that these methods are designed for polynomials with real coefficients.  
