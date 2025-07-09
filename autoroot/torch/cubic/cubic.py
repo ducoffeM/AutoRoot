@@ -14,20 +14,9 @@ def polynomial_root_calculation_3rd_degree(a : Tensor, b : Tensor, c: Tensor , d
         Tensor: Roots of the polynomial, shape (batch_size, 3, 2)
                 Each root is represented as a complex number (real, imaginary)
     """
-    # This function calculates the roots of a cubic polynomial of the form:
-    # a*x^3 + b*x^2 + c*x + d = 0
-        # a (batch_size, 1)
-        # b (batch_size, 1)
-        # c (batch_size, 1)
-        # d (batch_size, 1)
-
-    # output: roots of the polynomial in the form of a tensor of shape (batch_size,3, 2)
-    # where each root is represented as a complex number (real, imaginary)
-    # each row is the i_th root of the polynomial
     
     batch_size : int = a.shape[0]  # Get the batch size from the shape of a
     
-
     # Discriminant terms
     p : Tensor = (3 * a * c - b**2) / (3 * a**2)     # (batch_size, 1) because element-wise opeations
     q : Tensor = (2 * b**3 - 9 * a * b * c + 27 * a**2 * d) / (27 * a**3)    # (batch_size, 1)

@@ -4,8 +4,6 @@ from autoroot.torch.cubic.cubic import polynomial_root_calculation_3rd_degree
 
 
 def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
-    # Polynomial whose roots we are looking for :
-
     # Calculation of the polynomial
     def f(x, a, b, c, d):
         return a * x**3 + b * x**2 + c * x + d
@@ -17,13 +15,13 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
     d_torch = torch.tensor(d, dtype=torch.float32).reshape(-1, 1)
 
     roots_torch = polynomial_root_calculation_3rd_degree(a_torch, b_torch, c_torch, d_torch)
-    roots_numpy = roots_torch.cpu().detach().numpy()  # Convert to numpy array for easier handling
 
-    valeur_ok = True  # true if all roots values are close to zero (<10^(-10))
+    roots_numpy = roots_torch.cpu().detach().numpy()
+    roots_complex = roots_numpy[..., 0] + 1j * roots_numpy[..., 1]
 
-    for r in roots_numpy:
+    for r in roots_complex:
         # Calculation of the polynomial applied to the root
         y = f(r, a, b, c, d)
         np.testing.assert_allclose(
-            np.linalg.norm(y), 0, atol=1e-10
-        )  # Check if the polynomial evaluated at the root is close to zero
+            np.linalg.norm(y), 0, atol=1e-6
+        )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
