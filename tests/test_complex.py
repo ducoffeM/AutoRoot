@@ -66,7 +66,7 @@ def test_product_complex_real_batch(a, b):
     Test the product of a complex number and a real number using the product_of_2_complex_numbers_batch function.
     This function uses pytest to run the test.
     """
-    check_product_of_2_complex_numbers_batch(a, b)
+    check_product_complex_real_batch(a, b)
 
 
 @pytest.mark.parametrize(

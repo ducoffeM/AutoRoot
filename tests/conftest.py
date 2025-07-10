@@ -133,8 +133,10 @@ def check_product_complex_real_batch(a, b):
     a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
     b_tensor = torch.tensor([b], dtype=torch.float64).unsqueeze(0)
 
-    product_tensor = product_of_2_complex_numbers_batch(a_tensor, b_tensor)
+    product_tensor = product_complex_real_batch(a_tensor, b_tensor)
+    print(product_tensor)
     product_numpy = a * b
+    print(product_numpy)
 
     np.testing.assert_allclose(product_tensor[0, 0], np.real(product_numpy), atol=precision)
     np.testing.assert_allclose(product_tensor[0, 1], np.imag(product_numpy), atol=precision)
