@@ -1,5 +1,6 @@
 # AutoRoot
-AutoRoot: Differentiable Root Solvers for Cubic and Quartic Polynomials AutoRoot is a fast, fully differentiable PyTorch library for solving cubic and quartic equations
+AutoRoot : Differentiable Root Solvers for Cubic and Quartic Polynomials
+AutoRoot is a fast, fully differentiable PyTorch library for solving cubic and quartic equations
 
 
 ## 📚 Table of Contents
@@ -29,6 +30,7 @@ While initially developed for solving P3P problems (as part of improving the per
 ├── 📄 conftest.py
 ├── 📄 test_cubic.py
 ├── 📄 test_quartic.py
+├── 📄 test_complex.py
 
 📄 .pre-commit-config.yaml       # Pre-commit hooks config
 📄 pyproject.toml                # Build system and tool configs
@@ -36,23 +38,19 @@ While initially developed for solving P3P problems (as part of improving the per
 📄 tox.ini                       # Tox testing configuration
 ```
 # Dependencies
-AutoRoot primarily relies on PyTorch for its core tensor operations and differentiability features. numpy is also used within the test suite for robust result verification.
+AutoRoot relies primarily on:
+  - Python ≥ 3.8
+  - PyTorch ≥ 1.10 (for tensor operations and autograd)
+  - NumPy (for testing and reference comparisons)
+  - Pytest (for running the test suite)
 
-The primary dependencies for the library are:
-    - PyTorch: For tensor computation and automatic differentiation.
-    - Python: Version 3.8 or higher.
+All dependencies are declared in the pyproject.toml.
 
-For running the test suite, you will also need:
-    - Pytest: A testing framework.
-    - NumPy: Used for numerical comparisons and handling tolerances in tests.
-
-All required dependencies for the project and its testing are listed in the pyproject.toml file.
-
-# Using
+# Usage
 The main functions are located in the autoroot.torch.cubic and autoroot.torch.quartic modules.
-
-  - Input : coefficiants of the polynomial ->  torch.Tensor of size (batch_size, 1)
-  - Output : roots of the polynomial -> torch.Tensor where each complex root is a [real, imaginary]  vector.
+  - Input: Each coefficient (a, b, ..., e) is a tensor of shape (batch_size, 1)
+  - Output: A tensor of shape (batch_size, N, 2) where N = 3 for cubic or 4 for quartic.
+        Each root is represented as a pair [real, imaginary].
 
 Please note that these methods are designed for polynomials with real coefficients.
 
