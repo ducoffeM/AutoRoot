@@ -31,6 +31,7 @@ def polynomial_root_calculation_3rd_degree(a: Tensor, b: Tensor, c: Tensor, d: T
     j_: Tensor = torch.tensor([-0.5, torch.sqrt(torch.tensor(3)) / 2], dtype=torch.float64).repeat(
         batch_size, 1
     )  # cube root of unity
+
     for k in range(3):
         delta_sur_27: Tensor = -delta / 27  # (batch_size, 1)
 
@@ -55,6 +56,7 @@ def polynomial_root_calculation_3rd_degree(a: Tensor, b: Tensor, c: Tensor, d: T
                 )
             ),
         )
+
         # (batch_size, 2)
         root: Tensor = addition_batch(
             addition_batch(u_k, v_k), torch.stack([-b[:, 0] / (3 * a[:, 0]), 0.0 * b[:, 0]], dim=-1)
