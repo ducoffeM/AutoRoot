@@ -19,5 +19,3 @@ def test_cubic(a, b, c, d):
     This function uses pytest to run the test.
     """
     check_polynomial_root_calculation_3rd_degree(a, b, c, d)
-
-
