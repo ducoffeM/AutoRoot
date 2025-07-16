@@ -1,4 +1,24 @@
-# AutoRoot
+<br>
+
+<div align="center">
+  <a href="#">
+        <img src="https://img.shields.io/badge/Python-%E2%89%A53.9-efefef">
+    </a>
+    <a href="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-tests.yml">
+        <img alt="Tox" src="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-tests.yml/badge.svg">
+    </a>
+    <a href="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-linters.yml">
+        <img alt="Lint" src="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-linters.yml/badge.svg">
+    </a>
+    <a href="#">
+        <img src="https://img.shields.io/badge/License-MIT-efefef">
+    </a>
+    <br>
+    <a href="https://ducoffeM.github.io/AutoRoot/"><strong>Explore Jacobinet docs »</strong></a>
+</div>
+<br>
+
+# 👋 AutoRoot
 ***AutoRoot*** : Differentiable Root Solvers for Cubic and Quartic Polynomials
 AutoRoot is a fast, fully differentiable PyTorch library for solving cubic and quartic equations
 
