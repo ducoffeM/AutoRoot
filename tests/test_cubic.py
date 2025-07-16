@@ -8,9 +8,8 @@ from .conftest import check_polynomial_root_calculation_3rd_degree
     [
         (1, -6, 11, -6),  # Roots: 1, 2, 3
         (1, -3, 3, -1),  # Roots: 1, 1, 1
-        (1, -3, 3, -1),  # Roots: 1, 1, 1
-        (2, -4, 2, -1),  # Roots: 0.5, 1.0, 1.0
-        (1, 0, -4, 4),  # Roots: -2.0, 2.0
+        (2, -4, 2, -1),
+        (1, 0, -4, 4),
     ],
 )
 def test_cubic(a, b, c, d):

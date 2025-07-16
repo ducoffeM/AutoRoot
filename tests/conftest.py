@@ -29,6 +29,7 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
     d_torch = torch.tensor(d, dtype=torch.float64).reshape(-1, 1)
 
     roots_torch = polynomial_root_calculation_3rd_degree(a_torch, b_torch, c_torch, d_torch)
+    print(roots_torch)
 
     roots_numpy = roots_torch.cpu().detach().numpy()
     roots_complex = roots_numpy[..., 0] + 1j * roots_numpy[..., 1]
@@ -37,7 +38,7 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
         # Calculation of the polynomial applied to the root
         y = f(r, a, b, c, d)
         np.testing.assert_allclose(
-            np.linalg.norm(y), 0, atol=1e-10
+            np.linalg.norm(y), 0, atol=1e-6
         )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
 
 

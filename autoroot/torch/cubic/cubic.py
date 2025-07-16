@@ -37,17 +37,17 @@ def polynomial_root_calculation_3rd_degree(a: Tensor, b: Tensor, c: Tensor, d: T
 
         sqrt_term: Tensor = sqrt_batch(delta_sur_27)
 
-        # todo: check batch
         j_exp_k: Tensor = complex_number_power_k_batch(j_, k)  # Compute j^k for each batch
         j_exp_sub_k: Tensor = complex_number_power_k_batch(j_, -k)  # Compute j^-k for each batch
 
         u_k: Tensor = product_of_2_complex_numbers_batch(
             j_exp_k,
             sqrt_3_batch(
-                torch.stack([0.5 * (-q.squeeze() + sqrt_term[:, 0]), sqrt_term[:, 1]], dim=-1)
+                torch.stack([0.5 * (-q.squeeze() + sqrt_term[:, 0]), 0.5 * sqrt_term[:, 1]], dim=-1)
             ),
         )
         # (batch_size, 2)
+
         v_k: Tensor = product_of_2_complex_numbers_batch(
             j_exp_sub_k,
             sqrt_3_batch(
@@ -56,8 +56,8 @@ def polynomial_root_calculation_3rd_degree(a: Tensor, b: Tensor, c: Tensor, d: T
                 )
             ),
         )
-
         # (batch_size, 2)
+
         root: Tensor = addition_batch(
             addition_batch(u_k, v_k), torch.stack([-b[:, 0] / (3 * a[:, 0]), 0.0 * b[:, 0]], dim=-1)
         )

@@ -195,26 +195,42 @@ def module_batch(a: Tensor) -> Tensor:
     return torch.sqrt(a[:, 0] ** 2 + a[:, 1] ** 2).unsqueeze(-1)  # (batch_size, 1)
 
 
-def sqrt_3_batch(a: Tensor) -> Tensor:  # for a real number a_imag = 0
+def sqrt_3_batch(a: Tensor) -> Tensor:
     """
     Computes the cube root of a batch of real numbers.
     Each number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
-    imaginary part (which is zero for real numbers).
+    imaginary part.
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of real
-        numbers, where the second element (imaginary part) is zero.
+        numbers.
     Returns:
         A tensor of shape (batch_size, 2) representing the cube root of the
         batch of real numbers, where the first element is the real part and the
-        second element is the imaginary part (which is zero).
+        second element is the imaginary part.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
-    real_part: Tensor = torch.where(
+
+    real_part_if_real: Tensor = torch.where(
         a[:, 0] >= 0, a[:, 0] ** (1 / 3), -((-a[:, 0]) ** (1 / 3))
     )  # (batch_size, 1)
-    imag_part: Tensor = real_part * 0.0  # (batch_size, 1)
-    return torch.stack((real_part, imag_part), dim=-1)  # (batch_size, 2)
+    imag_part_if_real: Tensor = real_part_if_real * 0.0  # (batch_size, 1)
+    result_if_real: Tensor = torch.stack(
+        (real_part_if_real, imag_part_if_real), dim=-1
+    )  # (batch_size, 2)
+
+    r: Tensor = module_batch(a)  # (batch_size, 1)
+    teta: Tensor = argument_batch(a)  # (batch_size, 1)
+    r_pow_1_div3: Tensor = torch.pow(r[:, 0], 1 / 3)  # (batch_size, 1)
+    teta_div_3: Tensor = teta[:, 0] / 3  # (batch_size, 1)
+    real_part_if_not_real: Tensor = r_pow_1_div3 * torch.cos(teta_div_3)  # (batch_size, 1)
+    imag_part_if_not_real: Tensor = r_pow_1_div3 * torch.sin(teta_div_3)  # (batch_size, 1)
+    result_if_not_real: Tensor = torch.stack(
+        (real_part_if_not_real, imag_part_if_not_real), dim=-1
+    )  # (batch_size, 2)
+
+    result = torch.where(a[:, 1] == 0, result_if_real, result_if_not_real)
+    return result  # (batch_size, 2)
 
 
 def sqrt_complex_batch(a: Tensor) -> Tensor:
