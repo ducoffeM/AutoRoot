@@ -11,11 +11,11 @@
   <a href="#">
         <img src="https://img.shields.io/badge/Python-%E2%89%A53.9-efefef">
     </a>
-    <a href="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-tests.yml">
-        <img alt="Tox" src="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-tests.yml/badge.svg">
+    <a href="https://github.com/Pruneeuh/AutoRoot/actions/workflows/python-tests.yml">
+        <img alt="Tox" src="https://github.com/Pruneeuh/AutoRoot/actions/workflows/python-tests.yml/badge.svg">
     </a>
-    <a href="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-linter.yml">
-        <img alt="Lint" src="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-linter.yml/badge.svg">
+    <a href="https://github.com/Pruneeuh/AutoRoot/actions/workflows/python-linter.yml">
+        <img alt="Lint" src="https://github.com/Pruneeuh/AutoRoot/actions/workflows/python-linter.yml/badge.svg">
     </a>
     <a href="https://pepy.tech/project/autoroot_torch">
         <img alt="Pepy" src="https://static.pepy.tech/badge/autoroot_torch">
@@ -24,7 +24,7 @@
         <img src="https://img.shields.io/badge/License-MIT-efefef">
     </a>
     <br>
-    <a href="https://ducoffeM.github.io/AutoRoot/"><strong>Explore AutoRoot docs »</strong></a>
+    <a href="https://Pruneeuh.github.io/AutoRoot/"><strong>Explore AutoRoot docs »</strong></a>
 </div>
 <br>
 
@@ -86,8 +86,8 @@ print("Batch cubic roots:", roots_batch)
 
 | **Tutorial Name**           | Notebook                                                                                                                                                           |
 | :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| Find Roots of a Cubic polynom - ... | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ducoffeM/AutoRoot/blob/main/tutorials/Tutorial_1_cubic_solving_with_Cardano.ipynb)            |
-| Find Roots of a Quartic polynom - ... | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ducoffeM/jacobinet/blob/main/tutorials/Tutorial_1_quartic_solving_with_Ferrari.ipynb)            |
+| Find Roots of a Cubic polynom - ... | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Pruneeuh/AutoRoot/blob/main/tutorials/Tutorial_1_cubic_solving_with_Cardano.ipynb)            |
+| Find Roots of a Quartic polynom - ... | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Pruneeuh/jacobinet/blob/main/tutorials/Tutorial_1_quartic_solving_with_Ferrari.ipynb)            |
 
 
 
