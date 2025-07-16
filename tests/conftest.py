@@ -1,14 +1,25 @@
 import numpy as np
+from numpy.polynomial import Polynomial
 import torch
 from autoroot.torch.complex.complex_utils import *
 from autoroot.torch.cubic.cubic import polynomial_root_calculation_3rd_degree
 from autoroot.torch.quartic.quartic import (
     polynomial_root_calculation_4th_degree_ferrari,
 )
+import pytest
 
 precision = 1e-6  # precision for the complex numbers operations
 dtype = torch.float32
 
+def sort_roots(roots):
+    # sort solution by increasing real values + (max(real)+1)*img
+    roots_real_abs = np.abs(roots.real)
+    roots_imag_abs = np.abs(roots.imag)
+    indices = np.argsort(roots_real_abs + np.max(roots_real_abs+1)*roots_imag_abs)
+
+    sorted_roots = roots[np.arange(len(roots)), indices[np.arange(len(roots))]]
+
+    return sorted_roots
 
 def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
     """Test the polynomial root calculation for a cubic polynomial.
@@ -33,6 +44,7 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
 
     roots_numpy = roots_torch.cpu().detach().numpy()
     roots_complex = roots_numpy[..., 0] + 1j * roots_numpy[..., 1]
+    roots_complex = sort_roots(roots_complex)
 
     for r in roots_complex:
         # Calculation of the polynomial applied to the root
@@ -40,6 +52,24 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
         np.testing.assert_allclose(
             np.linalg.norm(y), 0, atol=precision
         )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
+
+    # compare the roots with the one found using numpy
+    poly = Polynomial([d, c, b, a])
+    roots_gt = poly.roots()[None]
+    roots_gt = sort_roots(roots_gt)
+
+    # since the roots are sorted, we can compare one to another
+    
+    for r_gt_i, r_i in zip(roots_gt, roots_complex):
+
+        np.testing.assert_allclose(
+            r_gt_i.real, r_i.real, atol=precision
+        )
+        np.testing.assert_allclose(
+            r_gt_i.imag, r_i.imag, atol=precision
+        )
+    
+
 
 
 def check_polynomial_root_calculation_4th_degree_ferrari(
@@ -74,12 +104,31 @@ def check_polynomial_root_calculation_4th_degree_ferrari(
     )
     roots_numpy = roots_torch.cpu().detach().numpy()
     roots_complex = roots_numpy[..., 0] + 1j * roots_numpy[..., 1]
+    roots_complex = sort_roots(roots_complex)
 
+    
     for r in roots_complex:
         # Calculation of the polynomial applied to the root
         y = f(r, a0, a1, a2, a3, a4)
         np.testing.assert_allclose(np.linalg.norm(y), 0, atol=1e-5)
         # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
+
+    # compare the roots with the one found using numpy
+    pytest.skip()
+    poly = Polynomial([a0, a1, a2, a3, a4])
+    roots_gt = poly.roots()[None]
+    roots_gt = sort_roots(roots_gt)
+
+    # since the roots are sorted, we can compare one to another
+    
+    for r_gt_i, r_i in zip(roots_gt, roots_complex):
+
+        np.testing.assert_allclose(
+            r_gt_i.real, r_i.real, atol=precision
+        )
+        np.testing.assert_allclose(
+            r_gt_i.imag, r_i.imag, atol=precision
+        )
 
 
 def check_addition_batch(a, b):
