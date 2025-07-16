@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   linters:
-    runs-on: linux
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: create requirements.txt so that pip cache with setup-python works
