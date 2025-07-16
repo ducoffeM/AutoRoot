@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" alt="Mon Projet" width="150">
+  <img src="logo.png" alt="Mon Projet" width="300">
 </p>
 
 # AutoRoot
