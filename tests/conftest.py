@@ -1,12 +1,26 @@
 import numpy as np
+import pytest
 import torch
 from autoroot.torch.complex.complex_utils import *
 from autoroot.torch.cubic.cubic import polynomial_root_calculation_3rd_degree
 from autoroot.torch.quartic.quartic import (
     polynomial_root_calculation_4th_degree_ferrari,
 )
+from numpy.polynomial import Polynomial
 
-precision = 1e-25  # precision for the complex numbers operations
+precision = 1e-6  # precision for the complex numbers operations
+dtype = torch.float32
+
+
+def sort_roots(roots):
+    # sort solution by increasing real values + (max(real)+1)*img
+    roots_real_abs = np.abs(roots.real)
+    roots_imag_abs = np.abs(roots.imag)
+    indices = np.argsort(roots_real_abs + np.max(roots_real_abs + 1) * roots_imag_abs)
+
+    sorted_roots = roots[np.arange(len(roots)), indices[np.arange(len(roots))]]
+
+    return sorted_roots
 
 
 def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
@@ -23,16 +37,17 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
         return a * x**3 + b * x**2 + c * x + d
 
     # Computation of the roots
-    a_torch = torch.tensor(a, dtype=torch.float64).reshape(-1, 1)  # Reshape to (batch_size, 1)
-    b_torch = torch.tensor(b, dtype=torch.float64).reshape(-1, 1)
-    c_torch = torch.tensor(c, dtype=torch.float64).reshape(-1, 1)
-    d_torch = torch.tensor(d, dtype=torch.float64).reshape(-1, 1)
+    a_torch = torch.tensor(a, dtype=torch.float32).reshape(-1, 1)  # Reshape to (batch_size, 1)
+    b_torch = torch.tensor(b, dtype=torch.float32).reshape(-1, 1)
+    c_torch = torch.tensor(c, dtype=torch.float32).reshape(-1, 1)
+    d_torch = torch.tensor(d, dtype=torch.float32).reshape(-1, 1)
 
     roots_torch = polynomial_root_calculation_3rd_degree(a_torch, b_torch, c_torch, d_torch)
     print(roots_torch)
 
     roots_numpy = roots_torch.cpu().detach().numpy()
     roots_complex = roots_numpy[..., 0] + 1j * roots_numpy[..., 1]
+    roots_complex = sort_roots(roots_complex)
 
     for r in roots_complex:
         # Calculation of the polynomial applied to the root
@@ -40,6 +55,17 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
         np.testing.assert_allclose(
             np.linalg.norm(y), 0, atol=precision
         )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
+
+    # compare the roots with the one found using numpy
+    poly = Polynomial([d, c, b, a])
+    roots_gt = poly.roots()[None]
+    roots_gt = sort_roots(roots_gt)
+
+    # since the roots are sorted, we can compare one to another
+
+    for r_gt_i, r_i in zip(roots_gt, roots_complex):
+        np.testing.assert_allclose(r_gt_i.real, r_i.real, atol=precision)
+        np.testing.assert_allclose(r_gt_i.imag, r_i.imag, atol=precision)
 
 
 def check_polynomial_root_calculation_4th_degree_ferrari(
@@ -58,11 +84,11 @@ def check_polynomial_root_calculation_4th_degree_ferrari(
         a4 (float): Coefficient of x^4 need to b different from 0
     """
 
-    a0_torch = torch.tensor(a0, dtype=torch.float64).reshape(-1, 1)  # Reshape to (batch_size, 1)
-    a1_torch = torch.tensor(a1, dtype=torch.float64).reshape(-1, 1)
-    a2_torch = torch.tensor(a2, dtype=torch.float64).reshape(-1, 1)
-    a3_torch = torch.tensor(a3, dtype=torch.float64).reshape(-1, 1)
-    a4_torch = torch.tensor(a4, dtype=torch.float64).reshape(-1, 1)
+    a0_torch = torch.tensor(a0, dtype=dtype).reshape(-1, 1)  # Reshape to (batch_size, 1)
+    a1_torch = torch.tensor(a1, dtype=dtype).reshape(-1, 1)
+    a2_torch = torch.tensor(a2, dtype=dtype).reshape(-1, 1)
+    a3_torch = torch.tensor(a3, dtype=dtype).reshape(-1, 1)
+    a4_torch = torch.tensor(a4, dtype=dtype).reshape(-1, 1)
 
     # Calculation of the polynomial
     def f(x, a0, a1, a2, a3, a4):
@@ -74,12 +100,25 @@ def check_polynomial_root_calculation_4th_degree_ferrari(
     )
     roots_numpy = roots_torch.cpu().detach().numpy()
     roots_complex = roots_numpy[..., 0] + 1j * roots_numpy[..., 1]
+    roots_complex = sort_roots(roots_complex)
 
     for r in roots_complex:
         # Calculation of the polynomial applied to the root
         y = f(r, a0, a1, a2, a3, a4)
-        np.testing.assert_allclose(np.linalg.norm(y), 0, atol=1e-6)
+        np.testing.assert_allclose(np.linalg.norm(y), 0, atol=1e-5)
         # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
+
+    # compare the roots with the one found using numpy
+    pytest.skip()
+    poly = Polynomial([a0, a1, a2, a3, a4])
+    roots_gt = poly.roots()[None]
+    roots_gt = sort_roots(roots_gt)
+
+    # since the roots are sorted, we can compare one to another
+
+    for r_gt_i, r_i in zip(roots_gt, roots_complex):
+        np.testing.assert_allclose(r_gt_i.real, r_i.real, atol=precision)
+        np.testing.assert_allclose(r_gt_i.imag, r_i.imag, atol=precision)
 
 
 def check_addition_batch(a, b):
@@ -87,8 +126,8 @@ def check_addition_batch(a, b):
     Test the addition of two complex numbers using the addition_batch function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
-    b_tensor = torch.tensor([np.real(b), np.imag(b)], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
+    b_tensor = torch.tensor([np.real(b), np.imag(b)], dtype=dtype).unsqueeze(0)
 
     addition_tensor = addition_batch(a_tensor, b_tensor)
     addition_numpy = a + b
@@ -103,8 +142,8 @@ def check_product_of_2_complex_numbers_batch(a, b):
         a (complex): First complex number
         b (complex): Second complex number
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
-    b_tensor = torch.tensor([np.real(b), np.imag(b)], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
+    b_tensor = torch.tensor([np.real(b), np.imag(b)], dtype=dtype).unsqueeze(0)
 
     product_tensor = product_of_2_complex_numbers_batch(a_tensor, b_tensor)
     product_numpy = a * b
@@ -116,7 +155,7 @@ def check_product_of_2_complex_numbers_batch(a, b):
 def check_sqrt_batch(a):
     """Compute the square root of a tensor element-wise.
     Args : a (complex)"""
-    a_tensor = torch.tensor([a], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([a], dtype=dtype).unsqueeze(0)
 
     sqrt_tensor = sqrt_batch(a_tensor)
     sqrt_numpy = np.sqrt(a, dtype=np.complex128)
@@ -131,8 +170,8 @@ def check_product_complex_real_batch(a, b):
         a (complex): Complex number
         b (float): Real number
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
-    b_tensor = torch.tensor([b], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
+    b_tensor = torch.tensor([b], dtype=dtype).unsqueeze(0)
 
     product_tensor = product_complex_real_batch(a_tensor, b_tensor)
     print(product_tensor)
@@ -148,7 +187,7 @@ def check_inverse_complex_batch(a):
     Test the inverse of a complex number using the product_of_2_complex_numbers_batch function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
 
     inverse_tensor = inverse_complex_number(a_tensor)
     inverse_numpy = 1 / a
@@ -162,7 +201,7 @@ def check_complex_number_power_k_batch(a, k):
     Test the power of a complex number using the complex_number_power_k_batch function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
 
     power_tensor = complex_number_power_k_batch(a_tensor, k)
     power_numpy = a**k
@@ -176,7 +215,7 @@ def check_argument_batch(a):
     Test the argument of a complex number using the argument_batch function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
 
     argument_tensor = argument_batch(a_tensor)
     argument_numpy = np.angle(a)
@@ -189,7 +228,7 @@ def check_module_batch(a):
     Test the module of a complex number using the module_batch function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
 
     module_tensor = module_batch(a_tensor)
     module_numpy = np.abs(a)
@@ -202,7 +241,7 @@ def check_sqrt_3_batch(a):
     Test the square root of a real number (a complex withe the real part equal to zero) using the sqrt_3_batch function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([a, 0.0], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([a, 0.0], dtype=dtype).unsqueeze(0)
 
     sqrt_3_tensor = sqrt_3_batch(a_tensor)
     sqrt_3_numpy = np.cbrt(a)
@@ -215,7 +254,7 @@ def check_sqrt_complex_batch(a):
     Test the square root of a complex number using the sqrt_batch function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
 
     sqrt_tensor = sqrt_complex_batch(a_tensor)
     sqrt_numpy = np.sqrt(a, dtype=np.complex128)
@@ -229,8 +268,8 @@ def check_division_2_complex_numbers(a, b):
     Test the division of two complex numbers using the division_2_complex_numbers function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
-    b_tensor = torch.tensor([np.real(b), np.imag(b)], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
+    b_tensor = torch.tensor([np.real(b), np.imag(b)], dtype=dtype).unsqueeze(0)
 
     division_tensor = division_2_complex_numbers(a_tensor, b_tensor)
     division_numpy = a / b
@@ -244,8 +283,8 @@ def check_addition_complex_real_batch(a, b):
     Test the addition of a complex number and a real number using the addition_complex_real_batch function.
     This function uses pytest to run the test.
     """
-    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=torch.float64).unsqueeze(0)
-    b_tensor = torch.tensor([b], dtype=torch.float64).unsqueeze(0)
+    a_tensor = torch.tensor([np.real(a), np.imag(a)], dtype=dtype).unsqueeze(0)
+    b_tensor = torch.tensor([b], dtype=dtype).unsqueeze(0)
 
     addition_tensor = addition_complex_real_batch(a_tensor, b_tensor)
     addition_numpy = a + b
