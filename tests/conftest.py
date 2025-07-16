@@ -38,7 +38,7 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
         # Calculation of the polynomial applied to the root
         y = f(r, a, b, c, d)
         np.testing.assert_allclose(
-            np.linalg.norm(y), 0, atol=1e-6
+            np.linalg.norm(y), 0, atol=precision
         )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
 
 
