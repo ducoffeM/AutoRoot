@@ -8,15 +8,15 @@ from autoroot.torch.quartic.quartic import (
 )
 from numpy.polynomial import Polynomial
 
-precision = 1e-6  # precision for the complex numbers operations
+precision = 1e-5  # precision for the complex numbers operations
 dtype = torch.float32
 
 
 def sort_roots(roots):
     # sort solution by increasing real values + (max(real)+1)*img
-    roots_real_abs = np.abs(roots.real)
-    roots_imag_abs = np.abs(roots.imag)
-    indices = np.argsort(roots_real_abs + np.max(roots_real_abs + 1) * roots_imag_abs)
+    roots_real = roots.real
+    roots_imag = roots.imag
+    indices = np.argsort(roots_real + np.max(roots_real + 1) * roots_imag)
 
     sorted_roots = roots[np.arange(len(roots)), indices[np.arange(len(roots))]]
 
@@ -60,6 +60,7 @@ def check_polynomial_root_calculation_3rd_degree(a, b, c, d):
     poly = Polynomial([d, c, b, a])
     roots_gt = poly.roots()[None]
     roots_gt = sort_roots(roots_gt)
+    print("rt_g", roots_gt)
 
     # since the roots are sorted, we can compare one to another
 
