@@ -1,3 +1,10 @@
+<div align="center">
+        <picture>
+                <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/logo.png">
+                <source media="(prefers-color-scheme: light)" srcset="./docs/assets/logo.png">
+                <img alt="Library Banner" src="./docs/assets/logo.svg" width="300" height="300">
+        </picture>
+</div>
 <br>
 
 <div align="center">
@@ -7,14 +14,17 @@
     <a href="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-tests.yml">
         <img alt="Tox" src="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-tests.yml/badge.svg">
     </a>
-    <a href="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-linters.yml">
-        <img alt="Lint" src="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-linters.yml/badge.svg">
+    <a href="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-linter.yml">
+        <img alt="Lint" src="https://github.com/ducoffeM/AutoRoot/actions/workflows/python-linter.yml/badge.svg">
+    </a>
+    <a href="https://pepy.tech/project/autoroot_torch">
+        <img alt="Pepy" src="https://static.pepy.tech/badge/autoroot_torch">
     </a>
     <a href="#">
         <img src="https://img.shields.io/badge/License-MIT-efefef">
     </a>
     <br>
-    <a href="https://ducoffeM.github.io/AutoRoot/"><strong>Explore Jacobinet docs »</strong></a>
+    <a href="https://ducoffeM.github.io/AutoRoot/"><strong>Explore AutoRoot docs »</strong></a>
 </div>
 <br>
 
@@ -121,9 +131,12 @@ Tests are written using pytest and utilize numpy for result verification (especi
 
 # 🚀 Installation
 You can install AutoRoot using `pip`:
+> [!IMPORTANT]
+> 🚨 There is another package named `autoroot` on PyPI. Please ensure you install **`autoroot_torch`** to get this library.
+
 
 ```python
-pip install autoroot
+pip install autoroot_torch
 ```
 
 Alternatively, to install from source:
