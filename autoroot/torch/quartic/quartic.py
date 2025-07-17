@@ -16,8 +16,8 @@ def polynomial_root_calculation_4th_degree_ferrari(
         a3 : Coefficient of x^3, shape (batch_size, 1)
         a4 : Coefficient of x^4, shape (batch_size, 1)
     Returns:
-        Tensor: Roots of the polynomial, shape (4, batch_size, 2)
-                Each root is represented as a complex number (real, imaginary)
+        Tensor: Roots of the polynomial, shape (batch_size, 4, 2)
+        Each root is represented as a complex number (real, imaginary)
     """
 
     batch_size: int = a0.shape[0]  # Get the batch size from the shape of a0
@@ -101,21 +101,21 @@ def polynomial_root_calculation_4th_degree_ferrari(
 
     x1_true: Tensor = addition_complex_real_batch(
         sqrt_complex_batch(addition_complex_real_batch(sqrt_inner1, -b2 / 2)), -S
-    )
+    )  # (batch_size, 2)
     x2_true: Tensor = addition_complex_real_batch(
         -sqrt_complex_batch(addition_complex_real_batch(sqrt_inner1, -b2 / 2)), -S
-    )
+    )  # (batch_size, 2)
     x3_true: Tensor = addition_complex_real_batch(
         sqrt_complex_batch(addition_complex_real_batch(-sqrt_inner1, -b2 / 2)), -S
-    )
+    )  # (batch_size, 2)
     x4_true: Tensor = addition_complex_real_batch(
         -sqrt_complex_batch(addition_complex_real_batch(-sqrt_inner1, -b2 / 2)), -S
-    )
+    )  # (batch_size, 2)
 
     result: Tensor = torch.where(
         alpha_0_real == float("inf"),
-        torch.stack([x1_true, x2_true, x3_true, x4_true]),
-        torch.stack([x1_false, x2_false, x3_false, x4_false]),
+        torch.stack([x1_true, x2_true, x3_true, x4_true], dim=1),
+        torch.stack([x1_false, x2_false, x3_false, x4_false], dim=1),
     )
 
-    return result  # (4,batch_size, 2)
+    return result  # (batch_size,4, 2)
