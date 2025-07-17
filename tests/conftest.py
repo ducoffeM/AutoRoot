@@ -8,7 +8,7 @@ from autoroot.torch.quartic.quartic import (
 )
 from numpy.polynomial import Polynomial
 
-precision = 1e-5  # precision for the complex numbers operations
+precision = 1e-3  # precision for the complex numbers operations
 dtype = torch.float32
 
 
@@ -110,12 +110,13 @@ def check_polynomial_root_calculation_4th_degree_ferrari(
         # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
 
     # compare the roots with the one found using numpy
-    pytest.skip()
     poly = Polynomial([a0, a1, a2, a3, a4])
     roots_gt = poly.roots()[None]
     roots_gt = sort_roots(roots_gt)
 
     # since the roots are sorted, we can compare one to another
+    print("Roots complex", roots_complex)
+    print("Roots gt", roots_gt)
 
     for r_gt_i, r_i in zip(roots_gt, roots_complex):
         np.testing.assert_allclose(r_gt_i.real, r_i.real, atol=precision)

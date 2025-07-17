@@ -13,7 +13,7 @@ def polynomial_root_calculation_3rd_degree(a: Tensor, b: Tensor, c: Tensor, d: T
         d : Constant term, shape (batch_size, 1)
     Returns:
         Tensor: Roots of the polynomial, shape (batch_size, 3, 2)
-                Each root is represented as a complex number (real, imaginary)
+        Each root is represented as a complex number (real, imaginary)
     """
 
     batch_size: int = a.shape[0]  # Get the batch size from the shape of a
