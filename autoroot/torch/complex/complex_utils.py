@@ -228,8 +228,10 @@ def sqrt_3_batch(a: Tensor) -> Tensor:
     result_if_not_real: Tensor = torch.stack(
         (real_part_if_not_real, imag_part_if_not_real), dim=-1
     )  # (batch_size, 2)
+    is_real: Tensor = (a[:, 1] == 0).unsqueeze(-1)  # (batch_size,1)
+    print("is_real", is_real.shape, is_real)
 
-    result = torch.where(a[:, 1] == 0, result_if_real, result_if_not_real)
+    result = torch.where(is_real, result_if_real, result_if_not_real)
     return result  # (batch_size, 2)
 
 
