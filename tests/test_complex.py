@@ -128,12 +128,12 @@ def test_module_batch(a):
     "a",
     [(1), (68.4), (4), (0), (-15), (-1), (3), (12.7)],
 )
-def test_sqrt_3_batch(a):
+def test_cube_root_batch(a):
     """
-    Test the square root of 3 using the sqrt_3_batch function.
+    Test the square root of 3 using the cube_root_batch function.
     This function uses pytest to run the test.
     """
-    check_sqrt_3_batch(a)
+    check_cube_root_batch(a)
 
 
 @pytest.mark.parametrize(

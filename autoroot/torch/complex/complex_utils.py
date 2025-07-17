@@ -195,7 +195,7 @@ def module_batch(a: Tensor) -> Tensor:
     return torch.sqrt(a[:, 0] ** 2 + a[:, 1] ** 2).unsqueeze(-1)  # (batch_size, 1)
 
 
-def sqrt_3_batch(a: Tensor) -> Tensor:
+def cube_root_batch(a: Tensor) -> Tensor:
     """
     Computes the cube root of a batch of real numbers.
     Each number is represented as a tensor of shape (batch_size, 2),

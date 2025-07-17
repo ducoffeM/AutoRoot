@@ -42,7 +42,7 @@ def polynomial_root_calculation_3rd_degree(a: Tensor, b: Tensor, c: Tensor, d: T
 
         u_k: Tensor = product_of_2_complex_numbers_batch(
             j_exp_k,
-            sqrt_3_batch(
+            cube_root_batch(
                 torch.stack([0.5 * (-q.squeeze() + sqrt_term[:, 0]), 0.5 * sqrt_term[:, 1]], dim=-1)
             ),
         )
@@ -50,7 +50,7 @@ def polynomial_root_calculation_3rd_degree(a: Tensor, b: Tensor, c: Tensor, d: T
 
         v_k: Tensor = product_of_2_complex_numbers_batch(
             j_exp_sub_k,
-            sqrt_3_batch(
+            cube_root_batch(
                 torch.stack(
                     [0.5 * (-q.squeeze() - sqrt_term[:, 0]), -0.5 * sqrt_term[:, 1]], dim=-1
                 )

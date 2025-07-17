@@ -238,17 +238,17 @@ def check_module_batch(a):
     np.testing.assert_allclose(module_tensor[0], module_numpy, atol=precision)
 
 
-def check_sqrt_3_batch(a):
+def check_cube_root_batch(a):
     """
-    Test the square root of a real number (a complex withe the real part equal to zero) using the sqrt_3_batch function.
+    Test the square root of a real number (a complex withe the real part equal to zero) using the cube_root_batch function.
     This function uses pytest to run the test.
     """
     a_tensor = torch.tensor([a, 0.0], dtype=dtype).unsqueeze(0)
 
-    sqrt_3_tensor = sqrt_3_batch(a_tensor)
-    sqrt_3_numpy = np.cbrt(a)
+    cbrt_3_tensor = cube_root_batch(a_tensor)
+    cbrt_3_numpy = np.cbrt(a)
 
-    np.testing.assert_allclose(sqrt_3_tensor[0:0], sqrt_3_numpy, atol=precision)
+    np.testing.assert_allclose(cbrt_3_tensor[0:0], cbrt_3_numpy, atol=precision)
 
 
 def check_sqrt_complex_batch(a):
