@@ -112,8 +112,12 @@ def polynomial_root_calculation_4th_degree_ferrari(
         -sqrt_complex_batch(addition_complex_real_batch(-sqrt_inner1, -b2 / 2)), -S
     )  # (batch_size, 2)
 
+    real_positive_root_exist: Tensor = (
+        (alpha_0_real == float("inf")).unsqueeze(-1).unsqueeze(-1)
+    )  # (batch_size, 1)
+
     result: Tensor = torch.where(
-        alpha_0_real == float("inf"),
+        real_positive_root_exist,
         torch.stack([x1_true, x2_true, x3_true, x4_true], dim=1),
         torch.stack([x1_false, x2_false, x3_false, x4_false], dim=1),
     )
