@@ -208,7 +208,7 @@ def module_batch(a: Tensor) -> Tensor:
 
 def cube_root_batch(a: Tensor) -> Tensor:
     """
-    Computes the cube root of a batch of real numbers.
+    Computes the cube root of a batch of complex numbers.
     Each number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
@@ -221,10 +221,7 @@ def cube_root_batch(a: Tensor) -> Tensor:
         second element is the imaginary part.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
-
-    real_part_if_real: Tensor = torch.where(
-        a[:, 0] >= 0, a[:, 0] ** (1 / 3), -((-a[:, 0]) ** (1 / 3))
-    )  # (batch_size, 1)
+    real_part_if_real = torch.sign(a[:, 0]) * torch.abs(a[:, 0]) ** (1 / 3)  # (batch_size, 1)
     imag_part_if_real: Tensor = real_part_if_real * 0.0  # (batch_size, 1)
     result_if_real: Tensor = torch.stack(
         (real_part_if_real, imag_part_if_real), dim=-1

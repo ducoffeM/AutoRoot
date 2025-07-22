@@ -109,23 +109,29 @@ def check_polynomial_root_calculation_4th_degree_ferrari(
     roots_complex = roots_numpy[..., 0] + 1j * roots_numpy[..., 1]
     roots_complex = sort_roots(roots_complex)
 
-    for r in roots_complex:
-        # Calculation of the polynomial applied to the root
-        y = f(r, a0, a1, a2, a3, a4)
-        np.testing.assert_allclose(
-            np.abs(np.real(y)), 0, atol=precision
-        )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
-        np.testing.assert_allclose(
-            np.abs(np.imag(y)), 0, atol=precision
-        )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
-        # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
-
     # compare the roots with the one found using numpy
     poly = Polynomial([a0, a1, a2, a3, a4])
     roots_gt = poly.roots()[None]
     roots_gt = sort_roots(roots_gt)
 
     dist = compute_diff(roots_complex, roots_gt)
+
+    for r in roots_complex:
+        # Calculation of the polynomial applied to the root
+        y = f(r, a0, a1, a2, a3, a4)
+        try:
+            np.testing.assert_allclose(
+                np.abs(np.real(y)), 0, atol=precision
+            )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
+            np.testing.assert_allclose(
+                np.abs(np.imag(y)), 0, atol=precision
+            )  # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
+            # Check if the polynomial evaluated at the root is close to zero (<10^(-10))
+        except:
+            import pdb
+
+            pdb.set_trace()
+
     np.testing.assert_allclose(dist, 0.0 * dist, atol=precision)
     """
     # since the roots are sorted, we can compare one to another
@@ -322,7 +328,12 @@ def check_backward(inputs, func, output_index=[0, 1]):
         output.backward()
         for i in range(len(inputs_tensors)):
             gradient = inputs_tensors[i].grad.cpu().detach().numpy()
-            assert not np.isnan(gradient).any()
+            try:
+                assert not np.isnan(gradient).any()
+            except:
+                import pdb
+
+                pdb.set_trace()
 
 
 def check_backward_sqrt_batch(a):

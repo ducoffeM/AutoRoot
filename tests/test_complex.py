@@ -173,7 +173,25 @@ def test_cube_root_batch(a):
     check_cube_root_batch(a)
     inputs = [a]
     func = cube_root_batch
-    # check_backward(inputs, func) # not working
+    output_shape = (1, 2)
+    check_shape(inputs, func, output_shape)
+
+
+@pytest.mark.parametrize(
+    "a",
+    [
+        (1)
+        # , (68.4), (4), (0), (-15), (-1), (3), (12.7)
+    ],
+)
+def test_cube_root_batch_backward(a):
+    """
+    Test the square root of 3 using the cube_root_batch function.
+    This function uses pytest to run the test.
+    """
+    inputs = [a]
+    func = cube_root_batch
+    check_backward(inputs, func)  # not working
     output_shape = (1, 2)
     check_shape(inputs, func, output_shape)
 
