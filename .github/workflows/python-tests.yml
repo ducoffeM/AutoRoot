@@ -65,3 +65,15 @@ jobs:
       - name: Run tox target env for ${{ env.TOXENV }}
         run: |
           python -m tox  # launch environment set by TOXENV at previous step
+
+  build-doc:
+    uses: ./.github/workflows/build-doc.yml
+
+  deploy-doc:
+    # for default branch (main)
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    needs: [build-doc, tests, linters]
+    uses: ./.github/workflows/deploy-doc.yml
+    with:
+      doc-version: ${{ needs.build-doc.outputs.doc-version }}
+      binder-env-fullref: ${{ github.repository }}/${{ github.ref_name}}
