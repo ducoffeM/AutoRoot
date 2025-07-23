@@ -16,15 +16,17 @@ def polynomial_root_calculation_4th_degree_ferrari(
     """
     Calculate the roots of a quartic polynomial using Ferrari's method.
     https://en.wikipedia.org/wiki/Quartic_function#Ferrari's_method
+
     Args:
         a0 : Constant term, shape (batch_size, 1)
         a1 : Coefficient of x^1, shape (batch_size, 1)
         a2 : Coefficient of x^2, shape (batch_size, 1)
         a3 : Coefficient of x^3, shape (batch_size, 1)
         a4 : Coefficient of x^4, shape (batch_size, 1)
+
     Returns:
         Tensor: Roots of the polynomial, shape (batch_size, 4, 2)
-        Each root is represented as a complex number (real, imaginary)
+            Each root is represented as a complex number (real, imaginary)
     """
 
     batch_size: int = a0.shape[0]  # Get the batch size from the shape of a0

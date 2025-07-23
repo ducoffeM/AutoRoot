@@ -86,8 +86,8 @@ print("Batch cubic roots:", roots_batch)
 
 | **Tutorial Name**           | Notebook                                                                                                                                                           |
 | :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| Find Roots of a Cubic polynom - ... | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Pruneeuh/AutoRoot/blob/main/tutorials/Tutorial_1_cubic_solving_with_Cardano.ipynb)            |
-| Find Roots of a Quartic polynom - ... | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Pruneeuh/jacobinet/blob/main/tutorials/Tutorial_1_quartic_solving_with_Ferrari.ipynb)            |
+| Find Roots of a Cubic polynomial equation | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Pruneeuh/AutoRoot/blob/main/tutorials/Tutorial_1_cubic_solving_with_Cardano.ipynb)            |
+| Find Roots of a Quartic polynomial equation | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Pruneeuh/AutoRoot/blob/main/tutorials/Tutorial_1_quartic_solving_with_Ferrari.ipynb)            |
 
 
 

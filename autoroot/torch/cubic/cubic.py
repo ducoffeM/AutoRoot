@@ -13,11 +13,13 @@ def polynomial_root_calculation_3rd_degree(a: Tensor, b: Tensor, c: Tensor, d: T
     """
     Calculate the roots of a cubic polynomial using Cardano's method.
     https://en.wikipedia.org/wiki/Cubic_equation
+
     Args:
         a : Coefficient of x^3, shape (batch_size, 1)
         b : Coefficient of x^2, shape (batch_size, 1)
         c : Coefficient of x, shape (batch_size, 1)
         d : Constant term, shape (batch_size, 1)
+
     Returns:
         Tensor: Roots of the polynomial, shape (batch_size, 3, 2)
         Each root is represented as a complex number (real, imaginary)

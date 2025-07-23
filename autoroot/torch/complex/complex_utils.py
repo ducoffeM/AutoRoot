@@ -11,14 +11,16 @@ def addition_batch(a: Tensor, b: Tensor) -> Tensor:
     Adds two batches of complex numbers.
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the first
-        batch of complex numbers.
+            batch of complex numbers.
         b : A tensor of shape (batch_size, 2) representing the second
-        batch of complex numbers.
+            batch of complex numbers.
+
     Returns:
         A tensor of shape (batch_size, 2) representing the sum of the two
-        batches of complex numbers.
+            batches of complex numbers.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     # b = torch.tensor(batch_size*[b_real, b_imag])
@@ -30,14 +32,16 @@ def product_of_2_complex_numbers_batch(a: Tensor, b: Tensor) -> Tensor:
     Multiplies two batches of complex numbers.
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the first
-        batch of complex numbers.
+            batch of complex numbers.
         b : A tensor of shape (batch_size, 2) representing the second
-        batch of complex numbers.
+            batch of complex numbers.
+
     Returns:
         A tensor of shape (batch_size, 2) representing the product of the two
-        batches of complex numbers.
+            batches of complex numbers.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     # b = torch.tensor(batch_size*[b_real, b_imag])
@@ -51,13 +55,15 @@ def sqrt_batch(a: Tensor) -> Tensor:
     """
     Computes the square root of a batch of real numbers.
     Each number is represented as a tensor of shape (batch_size, 1).
+
     Args:
         a : A tensor of shape (batch_size, 1) representing the batch of real
-        numbers.
+            numbers.
+
     Returns:
         A tensor of shape (batch_size, 2) representing the square root of the
-        batch of real numbers, where the first element is the real part and the
-        second element is the imaginary part.
+            batch of real numbers, where the first element is the real part and the
+            second element is the imaginary part.
     """
     eps = 1e-12
 
@@ -79,15 +85,16 @@ def product_complex_real_batch(a: Tensor, b: Tensor) -> Tensor:
     where the first element is the real part and the second element is the
     imaginary part. Each real number is represented as a tensor of shape
     (batch_size, 1).
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of complex
-        numbers.
+            numbers.
         b : A tensor of shape (batch_size, 1) representing the batch of real
-        numbers.
+            numbers.
     Returns:
         A tensor of shape (batch_size, 2) representing the product of the batch
-        of complex numbers and the batch of real numbers, where the first element
-        is the real part and the second element is the imaginary part.
+            of complex numbers and the batch of real numbers, where the first element
+            is the real part and the second element is the imaginary part.
     """
     # a = torch.tensor(batch_size*[,a_real, a_imag]) # (batch_size, 2)
     # b is a real number (batch_size,1) # (batch_size, 1)
@@ -100,13 +107,15 @@ def inverse_complex_number(a: Tensor) -> Tensor:
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of complex
-        numbers.
+            numbers.
+
     Returns:
         A tensor of shape (batch_size, 2) representing the inverse of the batch
-        of complex numbers, where the first element is the real part and the
-        second element is the imaginary part.
+            of complex numbers, where the first element is the real part and the
+            second element is the imaginary part.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     # a need to be =/= 0
@@ -124,15 +133,16 @@ def complex_number_power_k_batch(a: Tensor, k: int) -> Tensor:
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of complex
-        numbers.
+            numbers.
         k : An integer representing the power to which the complex numbers are
-        raised.
+            raised.
     Returns:
         A tensor of shape (batch_size, 2) representing the k-th power of the
-        batch of complex numbers, where the first element is the real part and
-        the second element is the imaginary part.
+            batch of complex numbers, where the first element is the real part and
+            the second element is the imaginary part.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     # k is an integer
@@ -158,12 +168,14 @@ def argument_batch(a: Tensor) -> Tensor:  # potentiellemen pb si (0,0)
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of complex
-        numbers.
+            numbers.
+
     Returns:
         A tensor of shape (batch_size, 1) representing the argument of the
-        batch of complex numbers, where each element is the angle in radians.
+            batch of complex numbers, where each element is the angle in radians.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     real: Tensor = a[:, :1]
@@ -178,12 +190,14 @@ def module_batch_old(a: Tensor) -> Tensor:
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of complex
-        numbers.
+            numbers.
+
     Returns:
         A tensor of shape (batch_size, 1) representing the modulus of the
-        batch of complex numbers, where each element is the modulus.
+            batch of complex numbers, where each element is the modulus.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     return torch.sqrt(a[:, 0] ** 2 + a[:, 1] ** 2).unsqueeze(-1)  # (batch_size, 1)
@@ -195,12 +209,14 @@ def module_batch(a: Tensor) -> Tensor:
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of complex
-        numbers.
+            numbers.
+
     Returns:
         A tensor of shape (batch_size, 1) representing the modulus of the
-        batch of complex numbers, where each element is the modulus.
+            batch of complex numbers, where each element is the modulus.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     return torch.sqrt(a[:, 0] ** 2 + a[:, 1] ** 2).unsqueeze(-1)  # (batch_size, 1)
@@ -212,13 +228,15 @@ def cube_root_batch(a: Tensor) -> Tensor:
     Each number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of real
-        numbers.
+            numbers.
+
     Returns:
         A tensor of shape (batch_size, 2) representing the cube root of the
-        batch of real numbers, where the first element is the real part and the
-        second element is the imaginary part.
+            batch of real numbers, where the first element is the real part and the
+            second element is the imaginary part.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     real_part_if_real = torch.sign(a[:, 0]) * torch.abs(a[:, 0]) ** (1 / 3)  # (batch_size, 1)
@@ -248,13 +266,15 @@ def sqrt_complex_batch(a: Tensor) -> Tensor:
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of complex
-        numbers.
+            numbers.
+
     Returns:
         A tensor of shape (batch_size, 2) representing the square root of the
-        batch of complex numbers, where the first element is the real part and
-        the second element is the imaginary part.
+            batch of complex numbers, where the first element is the real part and
+            the second element is the imaginary part.
     """
     real: Tensor = a[:, :1]  # (batch_size, 1)
     imag: Tensor = a[:, 1:]  # (batch_size, 1)
@@ -275,15 +295,17 @@ def division_2_complex_numbers(a: Tensor, b: Tensor) -> Tensor:
     Each complex number is represented as a tensor of shape (batch_size, 2),
     where the first element is the real part and the second element is the
     imaginary part.
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the first
-        batch of complex numbers.
+            batch of complex numbers.
         b : A tensor of shape (batch_size, 2) representing the second
-        batch of complex numbers.
+            batch of complex numbers.
+
     Returns:
         A tensor of shape (batch_size, 2) representing the division of the two
-        batches of complex numbers, where the first element is the real part and
-        the second element is the imaginary part.
+            batches of complex numbers, where the first element is the real part and
+            the second element is the imaginary part.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     # b = torch.tensor(batch_size*[b_real, b_imag])
@@ -298,15 +320,17 @@ def addition_complex_real_batch(a: Tensor, b: Tensor) -> Tensor:
     where the first element is the real part and the second element is the
     imaginary part. Each real number is represented as a tensor of shape
     (batch_size, 1).
+
     Args:
         a : A tensor of shape (batch_size, 2) representing the batch of complex
-        numbers.
+            numbers.
         b : A tensor of shape (batch_size, 1) representing the batch of real
-        numbers.
+            numbers.
+
     Returns:
         A tensor of shape (batch_size, 2) representing the sum of the batch
-        of complex numbers and the batch of real numbers, where the first element
-        is the real part and the second element is the imaginary part.
+            of complex numbers and the batch of real numbers, where the first element
+            is the real part and the second element is the imaginary part.
     """
     # a = torch.tensor(batch_size*[a_real, a_imag])
     #  b is a real number (batch_size,1)
